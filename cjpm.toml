@@ -1,0 +1,13 @@
+[dependencies]
+
+[package]
+  cjc-version = "0.54.3"
+  compile-option = ""
+  description = "json macho for cangjie"
+  link-option = ""
+  name = "json_cj"
+  output-type = "static"
+  src-dir = ""
+  target-dir = ""
+  version = "1.0.0"
+  package-configuration = {}
