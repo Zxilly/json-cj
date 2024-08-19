@@ -8,9 +8,8 @@ import json_cj.Json
 
 func kindToStr(k: JsonKind) {
     match (k) {
-        case JsonBool => "bool"
-        case JsNull => "null"
         case JsBool => "bool"
+        case JsNull => "null"
         case JsInt => "int"
         case JsFloat => "float"
         case JsString => "string"
@@ -19,11 +18,60 @@ func kindToStr(k: JsonKind) {
     }
 }
 
-func assertJson(a: JsonValue, b: JsonValue) {
+func assertJson(a: JsonValue, b: JsonValue): Unit {
+    @Assert(kindToStr(a.kind()), kindToStr(b.kind()))
+
+    match (a.kind()) {
+        case JsBool => 
+            let aa = a.asBool()
+            let bb = b.asBool()
+            @Assert(aa.getValue(), bb.getValue())
+
+        case JsNull => return
+        case JsInt => 
+            let aa = a.asInt()
+            let bb = b.asInt()
+            @Assert(aa.getValue(), bb.getValue())
+
+        case JsFloat => 
+            let aa = a.asFloat()
+            let bb = b.asFloat()
+            @Assert(aa.getValue(), bb.getValue())
+
+        case JsString => 
+            let aa = a.asString()
+            let bb = b.asString()
+            @Assert(aa.getValue(), bb.getValue())
+
+        case JsArray => 
+            let aa = a.asArray()
+            let bb = b.asArray()
+            @Assert(aa.size(), bb.size())
+            for (i in 0..aa.size()) {
+                assertJson(aa.get(i).getOrThrow(), bb.get(i).getOrThrow())
+            }
+        case JsObject => 
+            let aa = a.asObject()
+            let bb = b.asObject()
+            @Assert(aa.size(), bb.size())
+
+            let fields = aa.getFields()
+            
+    }
+
+    return
 }
 
 @Test
 class JSONTests {
+    @TestCase
+    func temp() {
+        let ka = JsonKind.JsArray
+        print(kindToStr(ka))
+        let kb = JsonKind.JsBool
+        print(kindToStr(kb))
+    }
+
     @TestCase
     func basic() {
         const jsonStr = """
@@ -34,7 +82,8 @@ class JSONTests {
 }
 """
         var jsonVal = JsonValue.fromStr(jsonStr)
-        var jsonLVal = @Json()
+        var jsonLVal = @Json(
+        )
         return
     }
 }

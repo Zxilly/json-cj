@@ -2,4 +2,4 @@ target/
 .vscode/
 .idea/
 .cache/
-*.machocall
+*.macrocall
