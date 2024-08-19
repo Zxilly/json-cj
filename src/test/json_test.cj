@@ -2,7 +2,7 @@ package json_cj.test
 
 import std.unittest.*
 import std.ast.*
-import std.unittest.testmacro.{Test, Assert, TestCase}
+import std.unittest.testmacro.{Test, Assert, TestCase, Fail}
 import encoding.json.*
 import json_cj.Json
 
@@ -56,7 +56,12 @@ func assertJson(a: JsonValue, b: JsonValue): Unit {
             @Assert(aa.size(), bb.size())
 
             let fields = aa.getFields()
-            
+            for ((k,v) in fields) {
+                match(bb.get(k)) {
+                    case Some(bv) => assertJson(v, bv)
+                    case None => @Fail("Field not found: " + k)
+                }
+            }
     }
 
     return
@@ -65,7 +70,7 @@ func assertJson(a: JsonValue, b: JsonValue): Unit {
 @Test
 class JSONTests {
     @TestCase
-    func temp() {
+    func jsonEqual() {
         let ka = JsonKind.JsArray
         print(kindToStr(ka))
         let kb = JsonKind.JsBool
@@ -82,6 +87,8 @@ class JSONTests {
 }
 """
         var jsonVal = JsonValue.fromStr(jsonStr)
+        assertJson(jsonVal, jsonVal)
+
         var jsonLVal = @Json(
         )
         return
