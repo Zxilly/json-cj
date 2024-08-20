@@ -85,7 +85,6 @@ class JSONTests {
         assertJson(@Json( [1, 2, 3] ), JsonArray([JsonInt(1), JsonInt(2), JsonInt(3)]))
         assertJson(@Json( ["apple", "banana", "cherry"] ),
             JsonArray([JsonString("apple"), JsonString("banana"), JsonString("cherry")]))
-        let null = None<Int>
         assertJson(
             @Json( [1, "two", true, null ] ),
             JsonArray([JsonInt(1), JsonString("two"), JsonBool(true), JsonNull()])
