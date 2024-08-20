@@ -12,13 +12,14 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [windows-latest, ubuntu-latest]
+        os: [windows-latest, ubuntu-latest, macos-13, macos-14]
     steps:
       - uses: actions/checkout@v4
 
-      - uses: Zxilly/setup-cangjie@v1.0.1
+      - uses: Zxilly/setup-cangjie@v1.1.0
         with:
           token: ${{ secrets.GITCODE_TOKEN }}
+          setenv: false
 
       - name: Run tests
         if: matrix.os == 'windows-latest'
