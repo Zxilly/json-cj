@@ -1,6 +1,8 @@
 # json-cj
 
 [![Tests](https://github.com/Zxilly/json-cj/actions/workflows/test.yml/badge.svg)](https://github.com/Zxilly/json-cj/actions/workflows/test.yml)
+![Static Badge](https://img.shields.io/badge/%E4%BB%93%E9%A2%89-green)
+
 
 适用于仓颉的 JSON 宏, 从 JSON 字面量生成 `encoding.json.JsonValue` 对象。
 
