@@ -1,0 +1,25 @@
+name: Tests
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  test:
+    name: Unit tests
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-13, macos-14, windows-latest, ubuntu-latest]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: Zxilly/setup-cangjie@v1.0.0
+        with:
+          token: ${{ secrets.GITCODE_TOKEN }}
+
+      - name: Run tests
+        run: |
+          cjpm test
