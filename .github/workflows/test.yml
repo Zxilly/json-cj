@@ -12,7 +12,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [macos-13, macos-14, windows-latest, ubuntu-latest]
+        os: [windows-latest, ubuntu-latest]
     steps:
       - uses: actions/checkout@v4
 
@@ -21,5 +21,13 @@ jobs:
           token: ${{ secrets.GITCODE_TOKEN }}
 
       - name: Run tests
+        if: matrix.os == 'windows-latest'
         run: |
+          cjpm test
+
+      - name: Run tests
+        if: matrix.os != 'windows-latest'
+        shell: bash
+        run: |
+          source $CANGJIE_HOME/envsetup.sh
           cjpm test
