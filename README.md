@@ -1,5 +1,7 @@
 # json-cj
 
+[![Tests](https://github.com/Zxilly/json-cj/actions/workflows/test.yml/badge.svg)](https://github.com/Zxilly/json-cj/actions/workflows/test.yml)
+
 适用于仓颉的 JSON 宏, 从 JSON 字面量生成 `encoding.json.JsonValue` 对象。
 
 ## 用法
