@@ -16,7 +16,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: Zxilly/setup-cangjie@v1.2.0
+      - uses: Zxilly/setup-cangjie@v1.2.1
         with:
           token: ${{ secrets.GITCODE_TOKEN }}
 
@@ -26,6 +26,7 @@ jobs:
           source $CANGJIE_HOME/envsetup.sh
           cjpm test --coverage
           cjcov -k
+          python scripts/clean.py
       
       - name: Coveralls
         uses: coverallsapp/github-action@v2.3.0
