@@ -31,3 +31,16 @@ jobs:
         uses: coverallsapp/github-action@v2.3.0
         with:
           format: gcov
+          parallel: true
+          flag-name: ${{ matrix.os }}
+  
+  finish:
+    needs: test
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+    steps:
+    - name: Coveralls Finished
+      uses: coverallsapp/github-action@v2.3.0
+      with:
+        parallel-finished: true
+        carryforward: "ubuntu-latest,macos-13,macos-14,windows-latest"
