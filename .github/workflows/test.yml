@@ -21,12 +21,10 @@ jobs:
           token: ${{ secrets.GITCODE_TOKEN }}
 
       - name: Run tests
-        shell: bash
         run: |
           cjpm test --coverage
       
-      - name: Upload results to Codecov
-        uses: codecov/codecov-action@v4
+      - name: Coveralls
+        uses: coverallsapp/github-action@v2.3.0
         with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          plugin: gcov
+          format: gcov
