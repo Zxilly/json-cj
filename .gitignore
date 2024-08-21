@@ -3,3 +3,9 @@ target/
 .idea/
 .cache/
 *.macrocall
+cjcov_logs/
+cov_output/
+index.html
+*.gcno
+*.gcda
+*.gcov
