@@ -23,7 +23,6 @@ jobs:
       - name: Run tests
         shell: bash
         run: |
-          source $CANGJIE_HOME/envsetup.sh
           cjpm test --coverage
           cjcov -k
           python scripts/clean.py
