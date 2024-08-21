@@ -21,8 +21,11 @@ jobs:
           token: ${{ secrets.GITCODE_TOKEN }}
 
       - name: Run tests
+        shell: bash
         run: |
+          source $CANGJIE_HOME/envsetup.sh
           cjpm test --coverage
+          cjcov -k
       
       - name: Coveralls
         uses: coverallsapp/github-action@v2.3.0
