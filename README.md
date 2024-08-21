@@ -1,6 +1,7 @@
 # json-cj
 
 [![Tests](https://github.com/Zxilly/json-cj/actions/workflows/test.yml/badge.svg)](https://github.com/Zxilly/json-cj/actions/workflows/test.yml)
+[![Coverage Status](https://coveralls.io/repos/github/Zxilly/json-cj/badge.svg?branch=master)](https://coveralls.io/github/Zxilly/json-cj?branch=master)
 ![Static Badge](https://img.shields.io/badge/%E4%BB%93%E9%A2%89-green)
 
 
