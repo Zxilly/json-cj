@@ -43,4 +43,5 @@ if os.getenv('CI') is not None:
     output = os.getenv('GITHUB_OUTPUT')
     if output is not None:
         with open(output, 'a') as file:
-            file.write(f'files={','.join(outs)}')
+            files = ",".join(outs)
+            file.write(f'files={files}')
