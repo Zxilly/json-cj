@@ -1,8 +1,11 @@
 import os
 import glob
 import platform
-    
-def process_gcov_files(directory: str):
+
+
+def process_gcov_files(directory: str) -> list[str]:
+    outs = []
+
     for file_path in glob.glob(os.path.join(directory, '**', '*.gcov'), recursive=True):
         with open(file_path, 'r') as file:
             content = file.readlines()
@@ -29,8 +32,15 @@ def process_gcov_files(directory: str):
 
         with open(file_path, 'w') as file:
             file.writelines(content)
+        outs.append(os.path.abspath(file_path))
 
 
 # get base directory relative to this script
 base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir, 'cov_output'))
-process_gcov_files(base_dir)
+outs = process_gcov_files(base_dir)
+
+if os.getenv('CI') is not None:
+    output = os.getenv('GITHUB_OUTPUT')
+    if output is not None:
+        with open(output, 'a') as file:
+            file.write(f'files={','.join(outs)}')

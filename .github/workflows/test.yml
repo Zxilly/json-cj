@@ -22,6 +22,7 @@ jobs:
 
       - name: Run tests
         shell: bash
+        id: test
         run: |
           cjpm test --coverage
           cjcov -k
@@ -32,4 +33,5 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           disable_search: true
-          files: "**/*.gcov"
+          files: ${{ steps.test.outputs.files }}
+          plugin: noop
