@@ -5,45 +5,19 @@ import std.ast.*
 import std.unittest.testmacro.{Test, Assert, TestCase, Fail}
 import encoding.json.*
 import json_cj.*
-
-func assertJson(a: JsonValue, b: JsonValue): Unit {
-    match ((a, b)) {
-        case (_: JsonNull, _: JsonNull) => return
-        case (a: JsonBool, b: JsonBool) => @Assert(a.getValue(), b.getValue())
-        case (a: JsonInt, b: JsonInt) => @Assert(a.getValue(), b.getValue())
-        case (a: JsonFloat, b: JsonFloat) => @Assert(a.getValue(), b.getValue())
-        case (a: JsonString, b: JsonString) => @Assert(a.getValue(), b.getValue())
-        case (a: JsonArray, b: JsonArray) =>
-            @Assert(a.size(), b.size())
-            for (i in 0..a.size()) {
-                assertJson(a.get(i).getOrThrow(), b.get(i).getOrThrow())
-            }
-        case (a: JsonObject, b: JsonObject) =>
-            @Assert(a.size(), b.size())
-            let fields = a.getFields()
-            for ((k, v) in fields) {
-                match (b.get(k)) {
-                    case Some(bv) => assertJson(v, bv)
-                    case None => @Fail("Field not found: " + k)
-                }
-            }
-        case _ => @Fail("Different types: " + a.toJsonString() + " vs " + b.toJsonString())
-    }
-
-    return
-}
+import json_cj.testutil.assertJson
 
 @Test
 class JSONTests {
     @TestCase
     func jsonEqual() {
         const jsonStr = """
-{
-  "name": "John Doe",
-  "age": 30,
-  "city": "New York"
-}
-"""
+                        {
+                          "name": "John Doe",
+                          "age": 30,
+                          "city": "New York"
+                        }
+                        """
 
         var jsonVal = JsonValue.fromStr(jsonStr)
         var jsonVal2 = JsonValue.fromStr(jsonStr)
@@ -94,12 +68,12 @@ class JSONTests {
     @TestCase
     func object() {
         const jsonStr = """
-{
-  "name": "John Doe",
-  "age": 30,
-  "city": "New York"
-}
-"""
+                        {
+                          "name": "John Doe",
+                          "age": 30,
+                          "city": "New York"
+                        }
+                        """
         let jsonVal = JsonValue.fromStr(jsonStr)
         let jsonMVal = @Json(
             {
@@ -111,12 +85,12 @@ class JSONTests {
         assertJson(jsonVal, jsonMVal)
 
         const jsonStr2 = """
-{
-  "fruits": ["apple", "banana", "cherry"],
-  "numbers": [1, 2, 3, 4, 5],
-  "mixed": [1, "two", true, null]
-}
-"""
+                        {
+                          "fruits": ["apple", "banana", "cherry"],
+                          "numbers": [1, 2, 3, 4, 5],
+                          "mixed": [1, "two", true, null]
+                        }
+                        """
         let jsonVal2 = JsonValue.fromStr(jsonStr2)
         let jsonMVal2 = @Json(
             {
@@ -128,21 +102,21 @@ class JSONTests {
         assertJson(jsonVal2, jsonMVal2)
 
         const jsonStr3 = """
-{
-  "person": {
-    "name": {
-      "first": "Jane",
-      "last": "Smith"
-    },
-    "age": 28,
-    "address": {
-      "street": "123 Main St",
-      "city": "Boston",
-      "country": "USA"
-    }
-  }
-}
-"""     
+                        {
+                          "person": {
+                            "name": {
+                              "first": "Jane",
+                              "last": "Smith"
+                            },
+                            "age": 28,
+                            "address": {
+                              "street": "123 Main St",
+                              "city": "Boston",
+                              "country": "USA"
+                            }
+                          }
+                        }
+                        """
         let jsonVal3 = JsonValue.fromStr(jsonStr3)
         let jsonMVal3 = @Json(
             {
@@ -163,30 +137,30 @@ class JSONTests {
         assertJson(jsonVal3, jsonMVal3)
 
         const jsonStr4 = """
-{
-  "company": "Tech Corp",
-  "employees": [
-    {
-      "id": 1,
-      "name": "Alice",
-      "department": "Engineering",
-      "projects": ["Project A", "Project B"]
-    },
-    {
-      "id": 2,
-      "name": "Bob",
-      "department": "Marketing",
-      "campaigns": {
-        "online": ["Social Media", "Email"],
-        "offline": ["TV", "Radio"]
-      }
-    }
-  ],
-  "founded": 1995,
-  "active": true,
-  "CEO": null
-}
-"""
+                        {
+                          "company": "Tech Corp",
+                          "employees": [
+                            {
+                              "id": 1,
+                              "name": "Alice",
+                              "department": "Engineering",
+                              "projects": ["Project A", "Project B"]
+                            },
+                            {
+                              "id": 2,
+                              "name": "Bob",
+                              "department": "Marketing",
+                              "campaigns": {
+                                "online": ["Social Media", "Email"],
+                                "offline": ["TV", "Radio"]
+                              }
+                            }
+                          ],
+                          "founded": 1995,
+                          "active": true,
+                          "CEO": null
+                        }
+                        """
         let jsonVal4 = JsonValue.fromStr(jsonStr4)
         let jsonMVal4 = @Json(
             {
@@ -228,6 +202,5 @@ class JSONTests {
     func trailingComma() {
         assertJson(@Json( [1, 2, 3,] ), JsonArray([JsonInt(1), JsonInt(2), JsonInt(3)]))
         assertJson(@Json( {"a": 1, "b": 2, "c": 3,} ), @Json( {"a": 1, "b": 2, "c": 3} ))
-
     }
 }

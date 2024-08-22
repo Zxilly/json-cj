@@ -2,7 +2,7 @@ package json_cj.impl
 
 import std.ast.*
 import std.collection.ArrayList
-import json_cj.helper.castJsonValue
+import json_cj.helper.*
 
 enum JsonState {
     | Initial

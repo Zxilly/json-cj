@@ -3,113 +3,157 @@ package json_cj.helper
 import std.collection.*
 import encoding.json.*
 
-public func castJsonValue<T>(v: Option<T>): JsonValue {
-    match (v) {
-        case Some(v) => return castJsonValue(v)
-        case None => return JsonNull()
+public interface ToJsonValue {
+    func toJsonValue(): JsonValue
+}
+
+extend Bool <: ToJsonValue {
+    public func toJsonValue(): JsonValue {
+        return JsonBool(this)
     }
 }
 
-public func castJsonValue<T>(v: Array<T>): JsonValue {
-    let arr = JsonArray()
-    for (i in v) {
-        arr.add(castJsonValue(i))
+extend Int8 <: ToJsonValue {
+    public func toJsonValue(): JsonValue {
+        return JsonInt(Int64(this))
     }
-    return arr
 }
 
-public func castJsonValue<T>(v: ArrayList<T>): JsonValue {
-    let arr = JsonArray()
-    for (i in v) {
-        arr.add(castJsonValue(i))
+extend Int16 <: ToJsonValue {
+    public func toJsonValue(): JsonValue {
+        return JsonInt(Int64(this))
     }
-    return arr
 }
 
-public func castJsonValue<T>(v: LinkedList<T>): JsonValue {
-    let arr = JsonArray()
-    for (i in v) {
-        arr.add(castJsonValue(i))
+extend Int32 <: ToJsonValue {
+    public func toJsonValue(): JsonValue {
+        return JsonInt(Int64(this))
     }
-    return arr
 }
 
-public func castJsonValue<T>(v: Set<T>) where T <: Hashable & Equatable<T> {
-    let arr = JsonArray()
-    for (i in v) {
-        arr.add(castJsonValue(i))
+extend Int64 <: ToJsonValue {
+    public func toJsonValue(): JsonValue {
+        return JsonInt(this)
     }
-    return arr
 }
 
-public func castJsonValue<T>(v: Map<String, T>): JsonValue {
-    let obj = JsonObject()
-    for ((k, v) in v) {
-        obj.put(k, castJsonValue(v))
+extend IntNative <: ToJsonValue {
+    public func toJsonValue(): JsonValue {
+        return JsonInt(Int64(this))
     }
-    return obj
 }
 
-public func castJsonValue(v: Bool): JsonValue {
-    return JsonBool(v)
+extend UInt8 <: ToJsonValue {
+    public func toJsonValue(): JsonValue {
+        return JsonInt(Int64(this))
+    }
 }
 
-public func castJsonValue(v: Int8): JsonValue {
-    return JsonInt(Int64(v))
+extend UInt16 <: ToJsonValue {
+    public func toJsonValue(): JsonValue {
+        return JsonInt(Int64(this))
+    }
 }
 
-public func castJsonValue(v: Int16): JsonValue {
-    return JsonInt(Int64(v))
+extend UInt32 <: ToJsonValue {
+    public func toJsonValue(): JsonValue {
+        return JsonInt(Int64(this))
+    }
 }
 
-public func castJsonValue(v: Int32): JsonValue {
-    return JsonInt(Int64(v))
+extend UInt64 <: ToJsonValue {
+    public func toJsonValue(): JsonValue {
+        return JsonInt(Int64(this))
+    }
 }
 
-public func castJsonValue(v: Int64): JsonValue {
-    return JsonInt(v)
+extend UIntNative <: ToJsonValue {
+    public func toJsonValue(): JsonValue {
+        return JsonInt(Int64(this))
+    }
 }
 
-public func castJsonValue(v: IntNative): JsonValue {
-    return JsonInt(Int64(v))
+extend Float16 <: ToJsonValue {
+    public func toJsonValue(): JsonValue {
+        return JsonFloat(Float64(this))
+    }
 }
 
-public func castJsonValue(v: UInt8): JsonValue {
-    return JsonInt(Int64(v))
+extend Float32 <: ToJsonValue {
+    public func toJsonValue(): JsonValue {
+        return JsonFloat(Float64(this))
+    }
 }
 
-public func castJsonValue(v: UInt16): JsonValue {
-    return JsonInt(Int64(v))
+extend Float64 <: ToJsonValue {
+    public func toJsonValue(): JsonValue {
+        return JsonFloat(this)
+    }
 }
 
-public func castJsonValue(v: UInt32): JsonValue {
-    return JsonInt(Int64(v))
+extend String <: ToJsonValue {
+    public func toJsonValue(): JsonValue {
+        return JsonString(this)
+    }
 }
 
-public func castJsonValue(v: UInt64): JsonValue {
-    return JsonInt(Int64(v))
+extend<T> Array<T> <: ToJsonValue where T <: ToJsonValue {
+    public func toJsonValue(): JsonValue {
+        let arr = JsonArray()
+        for (i in this) {
+            arr.add(i.toJsonValue())
+        }
+        return arr
+    }
 }
 
-public func castJsonValue(v: UIntNative): JsonValue {
-    return JsonInt(Int64(v))
+extend<T> ArrayList<T> <: ToJsonValue where T <: ToJsonValue {
+    public func toJsonValue(): JsonValue {
+        let arr = JsonArray()
+        for (i in this) {
+            arr.add(i.toJsonValue())
+        }
+        return arr
+    }
 }
 
-public func castJsonValue(v: Float16): JsonValue {
-    return JsonFloat(Float64(v))
+extend<T> LinkedList<T> <: ToJsonValue where T <: ToJsonValue {
+    public func toJsonValue(): JsonValue {
+        let arr = JsonArray()
+        for (i in this) {
+            arr.add(i.toJsonValue())
+        }
+        return arr
+    }
 }
 
-public func castJsonValue(v: Float32): JsonValue {
-    return JsonFloat(Float64(v))
+extend<K, V> TreeMap<K, V> <: ToJsonValue where K <: ToString, V <: ToJsonValue {
+    public func toJsonValue(): JsonValue {
+        let obj = JsonObject()
+        for ((k, v) in this) {
+            obj.put(k.toString(), v.toJsonValue())
+        }
+        return obj
+    }
 }
 
-public func castJsonValue(v: Float64): JsonValue {
-    return JsonFloat(v)
+extend<K> Option<K> <: ToJsonValue where K <: ToJsonValue {
+    public func toJsonValue(): JsonValue {
+        match (this) {
+            case Some(v) => return v.toJsonValue()
+            case None => return JsonNull()
+        }
+    }
 }
 
-public func castJsonValue(v: String): JsonValue {
-    return JsonString(v)
+public func castJsonValue(t: ToJsonValue): JsonValue {
+    return t.toJsonValue()
 }
 
-public func castJsonValue(v: ToJson): JsonValue {
-    return v.toJson()
+public func castJsonValue(t: JsonValue): JsonValue {
+    return t
+}
+
+public func castJsonValue(t: ToJson): JsonValue {
+    return t.toJson()
 }
