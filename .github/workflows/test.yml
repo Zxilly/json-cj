@@ -24,9 +24,12 @@ jobs:
         shell: bash
         run: |
           cjpm test --coverage
+          cjcov -k
+          python scripts/clean.py
       
       - name: Upload results to Codecov
         uses: codecov/codecov-action@v4
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          plugin: gcov
+          disable_search: true
+          files: "**/*.gcov"
