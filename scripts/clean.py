@@ -33,6 +33,7 @@ def process_gcov_files(directory: str) -> list[str]:
         with open(file_path, 'w') as file:
             file.writelines(content)
         outs.append(os.path.abspath(file_path))
+    return outs
 
 
 # get base directory relative to this script
