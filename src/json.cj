@@ -1,8 +1,8 @@
 macro package json_cj
 
-import std.ast.*
+import std.ast.Tokens
 
-public import json_cj.helper.*
+public import json_cj.helper.{castJsonValue}
 import json_cj.impl.jsonTransform
 
 public macro Json(input: Tokens): Tokens {

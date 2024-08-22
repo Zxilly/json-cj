@@ -215,4 +215,19 @@ class JSONTests {
         )
         assertJson(jsonVal4, jsonMVal4)
     }
+
+    @TestCase
+    func empty() {
+        assertJson(@Json( {} ), JsonObject())
+        assertJson(@Json( [] ), JsonArray())
+
+        @Assert((), @Json())
+    }
+
+    @TestCase
+    func trailingComma() {
+        assertJson(@Json( [1, 2, 3,] ), JsonArray([JsonInt(1), JsonInt(2), JsonInt(3)]))
+        assertJson(@Json( {"a": 1, "b": 2, "c": 3,} ), @Json( {"a": 1, "b": 2, "c": 3} ))
+
+    }
 }

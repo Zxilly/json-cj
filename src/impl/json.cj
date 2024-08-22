@@ -43,11 +43,11 @@ func parseValue(t: Tokens, start: Int64): (Tokens, Int64) {
         case TokenKind.IDENTIFIER where (tf.value == "null" || tf.value == "None") => return (quote(JsonNull()), start +
                 1)
         case _ => if (let Some((expr, next)) <- safeParseExprFragment(t, start)) {
-            var exprTokens = expr.toTokens()
+            let exprTokens = expr.toTokens()
             if (exprTokens.size > 1) {
                 return (quote(castJsonValue($(expr))), next)
             }
-            var first = exprTokens[0]
+            let first = exprTokens[0]
             match (first.kind) {
                 case TokenKind.STRING_LITERAL => return (quote(JsonString($(first))), next)
                 case TokenKind.INTEGER_LITERAL => return (quote(JsonInt($(first))), next)
@@ -74,7 +74,7 @@ func parseObject(t: Tokens, start: Int64): (Tokens, Int64) {
         match (cur.kind) {
             case TokenKind.RCURL => match (state) {
                 case JsonState.ObjectStart => return (quote(JsonObject()), i + 1)
-                case JsonState.ObjectValue =>
+                case JsonState.ObjectValue | JsonState.ObjectComma =>
                     tokens.append(quote(
                             return $(ident);
                         ))
@@ -138,7 +138,7 @@ func parseArray(t: Tokens, start: Int64): (Tokens, Int64) {
         match (cur.kind) {
             case TokenKind.RSQUARE => match (state) {
                 case JsonState.ArrayStart => return (quote(JsonArray()), i + 1)
-                case JsonState.ArrayValue =>
+                case JsonState.ArrayValue | JsonState.ArrayComma =>
                     tokens.append(quote(
                             return $(ident);
                         ))
@@ -178,18 +178,8 @@ func parseArray(t: Tokens, start: Int64): (Tokens, Int64) {
     throw Exception("No closing bracket")
 }
 
-// INITIAL -> OBJECT_START | ARRAY_START | STRING | NUMBER | BOOLEAN | NULL
-// OBJECT_START -> OBJECT_KEY | OBJECT_END
-// OBJECT_KEY -> OBJECT_COLON
-// OBJECT_COLON -> OBJECT_VALUE
-// OBJECT_VALUE -> OBJECT_COMMA | OBJECT_END
-// OBJECT_COMMA -> OBJECT_KEY
-// ARRAY_START -> ARRAY_VALUE | ARRAY_END
-// ARRAY_VALUE -> ARRAY_COMMA | ARRAY_END
-// ARRAY_COMMA -> ARRAY_VALUE
-// STRING | NUMBER | BOOLEAN | NULL -> OBJECT_COMMA | OBJECT_END | ARRAY_COMMA | ARRAY_END | END
-public func jsonTransform(input: Tokens): Tokens {
-    var t = Tokens()
+protected func jsonTransform(input: Tokens): Tokens {
+    let t = Tokens()
 
     for (ti in input) {
         if (let TokenKind.NL <- ti.kind) {
@@ -198,7 +188,7 @@ public func jsonTransform(input: Tokens): Tokens {
         t.append(ti)
     }
 
-    var ret = Tokens()
+    let ret = Tokens()
 
     if (t.size == 0) {
         return quote(())
