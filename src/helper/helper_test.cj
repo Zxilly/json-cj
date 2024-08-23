@@ -13,35 +13,51 @@ class HelperTests {
     func basic() {
         let a: Bool = true
         let i8: Int8 = 1
-        let i16: Int16 = 1
-        let i32: Int32 = 1
-        let i64: Int64 = 1
-        let ina: IntNative = 1
-        let u8: UInt8 = 1
-        let u16: UInt16 = 1
-        let u32: UInt32 = 1
-        let u64: UInt64 = 1
-        let una: UIntNative = 1 
-        let f16: Float16 = 1.0
-        let f32: Float32 = 1.0
-        let f64: Float64 = 1.0
+        let i16: Int16 = 2
+        let i32: Int32 = 3
+        let i64: Int64 = 4
+        let ina: IntNative = 5
+        let u8: UInt8 = 6
+        let u16: UInt16 = 7
+        let u32: UInt32 = 8
+        let u64: UInt64 = 9
+        let una: UIntNative = 10 
+        let f16: Float16 = 0.5
+        let f32: Float32 = 0.25
+        let f64: Float64 = 0.125
         let s: String = "hello"
 
         assertJson(castJsonValue(a), JsonBool(true))
         assertJson(castJsonValue(i8), JsonInt(1))
-        assertJson(castJsonValue(i16), JsonInt(1))
-        assertJson(castJsonValue(i32), JsonInt(1))
-        assertJson(castJsonValue(i64), JsonInt(1))
-        assertJson(castJsonValue(ina), JsonInt(1))
-        assertJson(castJsonValue(u8), JsonInt(1))
-        assertJson(castJsonValue(u16), JsonInt(1))
-        assertJson(castJsonValue(u32), JsonInt(1))
-        assertJson(castJsonValue(u64), JsonInt(1))
-        assertJson(castJsonValue(una), JsonInt(1))
-        assertJson(castJsonValue(f16), JsonFloat(1.0))
-        assertJson(castJsonValue(f32), JsonFloat(1.0))
-        assertJson(castJsonValue(f64), JsonFloat(1.0))
+        assertJson(castJsonValue(i16), JsonInt(2))
+        assertJson(castJsonValue(i32), JsonInt(3))
+        assertJson(castJsonValue(i64), JsonInt(4))
+        assertJson(castJsonValue(ina), JsonInt(5))
+        assertJson(castJsonValue(u8), JsonInt(6))
+        assertJson(castJsonValue(u16), JsonInt(7))
+        assertJson(castJsonValue(u32), JsonInt(8))
+        assertJson(castJsonValue(u64), JsonInt(9))
+        assertJson(castJsonValue(una), JsonInt(10))
+        assertJson(castJsonValue(f16), JsonFloat(0.5))
+        assertJson(castJsonValue(f32), JsonFloat(0.25))
+        assertJson(castJsonValue(f64), JsonFloat(0.125))
         assertJson(castJsonValue(s), JsonString("hello"))
+
+        assertJson(a.toJsonValue(), JsonBool(true))
+        assertJson(i8.toJsonValue(), JsonInt(1))
+        assertJson(i16.toJsonValue(), JsonInt(2))
+        assertJson(i32.toJsonValue(), JsonInt(3))
+        assertJson(i64.toJsonValue(), JsonInt(4))
+        assertJson(ina.toJsonValue(), JsonInt(5))
+        assertJson(u8.toJsonValue(), JsonInt(6))
+        assertJson(u16.toJsonValue(), JsonInt(7))
+        assertJson(u32.toJsonValue(), JsonInt(8))
+        assertJson(u64.toJsonValue(), JsonInt(9))
+        assertJson(una.toJsonValue(), JsonInt(10))
+        assertJson(f16.toJsonValue(), JsonFloat(0.5))
+        assertJson(f32.toJsonValue(), JsonFloat(0.25))
+        assertJson(f64.toJsonValue(), JsonFloat(0.125))
+        assertJson(s.toJsonValue(), JsonString("hello"))
     }
 
     @TestCase
