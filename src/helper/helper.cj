@@ -127,12 +127,45 @@ extend<T> LinkedList<T> <: ToJsonValue where T <: ToJsonValue {
     }
 }
 
-extend<K> Option<K> <: ToJsonValue where K <: ToJsonValue {
+func matchValue<T>(v: T): JsonValue {
+    match (v) {
+        case vv: ToJson => return vv.toJson()
+        case vv: ToJsonValue => return vv.toJsonValue()
+        case _ => throw Exception("Value must implement ToJson or ToJsonValue")
+    }
+}
+
+extend<K> Option<K> <: ToJsonValue {
     public func toJsonValue(): JsonValue {
         match (this) {
-            case Some(v) => return v.toJsonValue()
+            case Some(v) => return matchValue(v)
             case None => return JsonNull()
         }
+    }
+}
+
+
+extend<K, V> TreeMap<K, V> <: ToJsonValue where K <: ToString & Equatable<K> {
+    public func toJsonValue(): JsonValue {
+        let obj = JsonObject()
+        
+        for ((k,v) in this) {
+            obj.put(k.toString(), matchValue(v))
+        }
+
+        return obj
+    }
+}
+
+extend<K, V> HashMap<K, V> <: ToJsonValue where K <: ToString & Equatable<K> {
+    public func toJsonValue(): JsonValue {
+        let obj = JsonObject()
+        
+        for ((k,v) in this) {
+            obj.put(k.toString(), matchValue(v))
+        }
+
+        return obj
     }
 }
 
@@ -146,20 +179,4 @@ public func castJsonValue(t: JsonValue): JsonValue {
 
 public func castJsonValue(t: ToJson): JsonValue {
     return t.toJson()
-}
-
-public func castJsonValue<K, V>(t: Map<K, ToJsonValue>): JsonObject where K <: ToString & Equatable<K> {
-    let obj = JsonObject()
-    for ((k, v) in t) {
-        obj.put(k.toString(), v.toJsonValue())
-    }
-    return obj
-}
-
-public func castJsonValue<K, V>(t: Map<K, ToJson>): JsonObject where K <: ToString & Equatable<K> {
-    let obj = JsonObject()
-    for ((k, v) in t) {
-        obj.put(k.toString(), v.toJson())
-    }
-    return obj
 }
