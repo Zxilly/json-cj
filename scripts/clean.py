@@ -23,7 +23,10 @@ def process_gcov_files(directory: str) -> list[str]:
             continue
         
         # rewrite the path separator
-        fl = fl.replace('\\', '/')
+        if platform.system() == 'Windows':
+            fl = fl.replace('/', '\\')
+        else:
+            fl = fl.replace('\\', '/')
         
         content[0] = fl
 
