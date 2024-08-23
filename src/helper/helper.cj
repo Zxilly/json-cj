@@ -148,10 +148,18 @@ public func castJsonValue(t: ToJson): JsonValue {
     return t.toJson()
 }
 
-public func castJsonValue<K, V>(t: Map<K, V>): JsonObject where K <: ToString & Equatable<K>, V <: ToJsonValue {
+public func castJsonValue<K, V>(t: Map<K, ToJsonValue>): JsonObject where K <: ToString & Equatable<K> {
     let obj = JsonObject()
     for ((k, v) in t) {
         obj.put(k.toString(), v.toJsonValue())
+    }
+    return obj
+}
+
+public func castJsonValue<K, V>(t: Map<K, ToJson>): JsonObject where K <: ToString & Equatable<K> {
+    let obj = JsonObject()
+    for ((k, v) in t) {
+        obj.put(k.toString(), v.toJson())
     }
     return obj
 }
