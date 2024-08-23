@@ -20,18 +20,20 @@ jobs:
         with:
           token: ${{ secrets.GITCODE_TOKEN }}
 
+      - run: pipx install gcovr
+
       - name: Run tests
         shell: bash
-        id: test
         run: |
           cjpm test --coverage
           cjcov -k
           python scripts/clean.py
+          gcovr -g -k --lcov lcov.info
       
       - name: Upload results to Codecov
         uses: codecov/codecov-action@v4
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           disable_search: true
-          files: ${{ steps.test.outputs.files }}
+          files: lcov.info
           plugin: noop

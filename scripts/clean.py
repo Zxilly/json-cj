@@ -17,7 +17,7 @@ def process_gcov_files(directory: str) -> list[str]:
 
         fl = content[0]
 
-        if 'Source:std.' in fl:
+        if 'Source:std.' in fl or "testutil" in fl:
             os.unlink(file_path)
             print(f'Deleted file: {file_path}')
             continue
@@ -36,10 +36,3 @@ def process_gcov_files(directory: str) -> list[str]:
 # get base directory relative to this script
 base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir, 'cov_output'))
 outs = process_gcov_files(base_dir)
-
-if os.getenv('CI') is not None:
-    output = os.getenv('GITHUB_OUTPUT')
-    if output is not None:
-        with open(output, 'a') as file:
-            files = ",".join(outs)
-            file.write(f'files={files}')

@@ -11,4 +11,5 @@ venv/
 *.gcno
 *.gcda
 *.gcov
+lcov.info
 coverage.*
