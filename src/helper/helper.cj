@@ -127,16 +127,6 @@ extend<T> LinkedList<T> <: ToJsonValue where T <: ToJsonValue {
     }
 }
 
-extend<K, V> TreeMap<K, V> <: ToJsonValue where K <: ToString, V <: ToJsonValue {
-    public func toJsonValue(): JsonValue {
-        let obj = JsonObject()
-        for ((k, v) in this) {
-            obj.put(k.toString(), v.toJsonValue())
-        }
-        return obj
-    }
-}
-
 extend<K> Option<K> <: ToJsonValue where K <: ToJsonValue {
     public func toJsonValue(): JsonValue {
         match (this) {
@@ -156,4 +146,12 @@ public func castJsonValue(t: JsonValue): JsonValue {
 
 public func castJsonValue(t: ToJson): JsonValue {
     return t.toJson()
+}
+
+public func castJsonValue<K, V>(t: Map<K, V>): JsonObject where K <: ToString & Equatable<K>, V <: ToJsonValue {
+    let obj = JsonObject()
+    for ((k, v) in t) {
+        obj.put(k.toString(), v.toJsonValue())
+    }
+    return obj
 }

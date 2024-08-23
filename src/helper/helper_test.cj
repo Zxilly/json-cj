@@ -27,21 +27,6 @@ class HelperTests {
         let f64: Float64 = 1.0
         let s: String = "hello"
 
-        assertJson(a.toJsonValue(), JsonBool(true))
-        assertJson(i8.toJsonValue(), JsonInt(1))
-        assertJson(i16.toJsonValue(), JsonInt(1))
-        assertJson(i32.toJsonValue(), JsonInt(1))
-        assertJson(i64.toJsonValue(), JsonInt(1))
-        assertJson(ina.toJsonValue(), JsonInt(1))
-        assertJson(u8.toJsonValue(), JsonInt(1))
-        assertJson(u16.toJsonValue(), JsonInt(1))
-        assertJson(u32.toJsonValue(), JsonInt(1))
-        assertJson(u64.toJsonValue(), JsonInt(1))
-        assertJson(una.toJsonValue(), JsonInt(1))
-        assertJson(f16.toJsonValue(), JsonFloat(1.0))
-        assertJson(f32.toJsonValue(), JsonFloat(1.0))
-        assertJson(f64.toJsonValue(), JsonFloat(1.0))
-
         assertJson(castJsonValue(a), JsonBool(true))
         assertJson(castJsonValue(i8), JsonInt(1))
         assertJson(castJsonValue(i16), JsonInt(1))
@@ -57,13 +42,27 @@ class HelperTests {
         assertJson(castJsonValue(f32), JsonFloat(1.0))
         assertJson(castJsonValue(f64), JsonFloat(1.0))
         assertJson(castJsonValue(s), JsonString("hello"))
-        
     }
 
     @TestCase
     func tojson() {
         let t = DataModelInt(233)
         assertJson(castJsonValue(t), JsonInt(233))
+    }
+
+    @TestCase
+    func jsonValue() {
+        let a = JsonInt(1)
+        let b = JsonFloat(1.0)
+        let c = JsonBool(true)
+        let d = JsonString("hello")
+        let e = JsonNull()
+
+        assertJson(castJsonValue(a), a)
+        assertJson(castJsonValue(b), b)
+        assertJson(castJsonValue(c), c)
+        assertJson(castJsonValue(d), d)
+        assertJson(castJsonValue(e), e)
     }
 
     @TestCase

@@ -5,7 +5,10 @@ target/
 *.macrocall
 cjcov_logs/
 cov_output/
-index.html
+venv/
+*.html
+*.css
 *.gcno
 *.gcda
 *.gcov
+coverage.*
