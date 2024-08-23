@@ -17,16 +17,13 @@ def process_gcov_files(directory: str) -> list[str]:
 
         fl = content[0]
 
-        if 'Source:std.core' in fl:
+        if 'Source:std.' in fl:
             os.unlink(file_path)
             print(f'Deleted file: {file_path}')
             continue
         
         # rewrite the path separator
-        if platform.system() == 'Windows':
-            fl = fl.replace('/', '\\')
-        else:
-            fl = fl.replace('\\', '/')
+        fl = fl.replace('\\', '/')
         
         content[0] = fl
 
