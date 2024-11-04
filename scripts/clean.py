@@ -17,7 +17,9 @@ def process_gcov_files(directory: str) -> list[str]:
 
         fl = content[0]
 
-        if 'Source:std.' in fl or "testutil" in fl:
+        remove_cond = ['Source:std', 'Source:serialization', 'testutil']
+
+        if any([cond in fl for cond in remove_cond]):
             os.unlink(file_path)
             print(f'Deleted file: {file_path}')
             continue
