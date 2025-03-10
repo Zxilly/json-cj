@@ -1,7 +1,7 @@
 [dependencies]
 
 [package]
-  cjc-version = "0.58.3"
+  cjc-version = "0.59.6"
   compile-option = ""
   description = "json macho for cangjie"
   link-option = ""

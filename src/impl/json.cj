@@ -61,6 +61,7 @@ func parseValue(t: Tokens, start: Int64): (Tokens, Int64) {
     }
 }
 
+// cjlint-ignore -start !G.FUN.01
 func parseObject(t: Tokens, start: Int64): (Tokens, Int64) {
     let ident = getIdent("jsonCjObject")
     let tokens = quote(
@@ -123,6 +124,7 @@ func parseObject(t: Tokens, start: Int64): (Tokens, Int64) {
     diagReport(DiagReportLevel.ERROR, t, "No closing curly bracket", "No closing curly bracket")
     throw Exception("No closing curly bracket")
 }
+// cjlint-ignore -end
 
 func parseArray(t: Tokens, start: Int64): (Tokens, Int64) {
     let ident = getIdent("jsonCjArray")
